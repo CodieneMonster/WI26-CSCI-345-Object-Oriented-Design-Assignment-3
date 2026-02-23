@@ -1,217 +1,75 @@
-# WI26-CSCI-345-Object-Oriented-Design-Assignment-2
+Deadwood Game – Assignment 2
+CSCI 345 – Object Oriented Design
 
+Overview:
+This project implements a console-based version of the Deadwood board game.
+The system loads game data from XML files, builds the game world (board, scenes, roles, players), and allows users to interact with the game through text commands.
 
-## Implementing Deadwood Game
+The main gameplay loop is controlled through Deadwood.java, which uses:
+-Game — core game state and logic
+-GameController — command interpreter
+-ParseXML — XML loader for board and cards
 
-This part of the assignment is asking you to implement! You analyzed the problem, designed a solution, now it is time to implement the design.
+Project Structure:
+Key classes:
 
----
+Deadwood.java          → Main program (runs the game)
+Game.java              → Game state and turn logic
+GameController.java    → Command parser
+ParseXML.java          → XML loader
+Board.java             → Game board
+Location.java / Set.java
+Player.java
+Role.java / OnCardRole.java / OffCardRole.java
+SceneCard.java
+Deck.java
+ShotTracker.java
+Bank.java
 
-## Outcomes
+How to Compile:
+-Open a terminal inside the project directory and run:
+  javac *.java
 
-Upon successful completion of this assignment, you will:
+How to Run the Full Game:
 
-- Convert your software design into a working program
-- Demonstrate how the following class relationships are realized in Java:
-  - Association
-  - Aggregation
-  - Composition
-  - Implementation
-  - Inheritance
-- Have a text-based (command-based) implementation of Deadwood
+The main entry point is:
+java Deadwood <numPlayers>
 
----
+Example:
+java Deadwood 2
 
-## Problem Statement
+Expected startup output:
+Deadwood started with 2 players.
+Type 'help' for commands.
+>
 
-Implement your Deadwood design as a console application. This version of your game is intended to be playable but may not be aesthetically pleasing. The point of the program is to verify that your design correctly models the game play logic. For example, players can only move to adjacent rooms and your program must enforce this restriction.
+Available commands inside the game prompt:
+help
+status
+who
+where
+board
+move <location>
+work <roleName>
+rehearse
+upgrade <targetRank> <dollars|credits>
+end
+endday
+endgame
 
-### Required Tasks/Actions
-
-=======
-CSCI 345–Assignment 2
-Implementation
-Dr. Moushumi Sharmin (in collaboration with: Dr. Aran Clauson)
-Points: [30+10] (10% + 5% of your overall course grade)
-This part of the assignment is asking you to implement! You analyzed the problem, designed a
-solution, now it is time to implement the design.
-Outcomes
-Upon successful completion of this assignment, you will
-• Convert your software design into a working program
-• Demonstrate how the following class relationships are realized in Java
-• Association, Aggregation, Composition, Implementation, and Inheritance
-• Have a text-based (command-based) implementation of Deadwood
-Problem Statement
-Implement your Deadwood design as a console application. This version of your game is
-indented to be playable but may not be aesthetically pleasing. The point of the program is to
-verify that your design correctly models the game play logic. For example, players can only move
-to adjacent rooms and your program must enforce this restriction.
-The program MUST accommodate the following tasks/actions:
-
-**Player Management:**
-- Identify the active player
-- Display the player's information
-- Display location of all players and indicate the active player
-
-**Movement:**
-- Move from one location to another
-- Display the source and destination
-
-**Working on a Part:**
-- The active player works on a part
-- Display part-related information
-
-**Upgrading Level:**
-- Display current and target level
-- Support different types of upgrades
-
-**Rehearsing:**
-- The active player rehearses
-- Display related information
-
-**Acting:**
-- The active player acts on a role
-- Display related information
-
-**Turn Management:**
-- End the current player's turn
-- Active player can decide to end a turn
-- The end command is recommended even if the active player has no legal actions available
-
-**Game Control:**
-- An End Game command
-- This will help with testing as the game can be ended at any given time
-
----
-
-## Example Interactions
-
-### Example 1: Player Working a Part
-
-If the active player is working a part, the interaction could be the following:
-
-```
+Example session:
 > who
-The active player is Jane Doe. She has $15, 3 credits and 10 fames. She is working Crusty Prospector, "Aww, peaches!"
-
+> status
 > where
-in Train Station shooting Law and the Old West scene 20
-
-> act
-success! You got $1
-
+> move Ranch
+> work Sheriff
+> rehearse
 > end
-```
 
-### Example 2: Player Not Working a Part
+Design Notes:
+-GameController separates command parsing from game logic (Single Responsibility Principle).
+-Game owns all major systems (Board, Bank, Deck, ShotTracker, Players).
+-ParseXML builds the world dynamically from XML instead of hardcoding data.
+-Roles use inheritance (Role → OnCardRole / OffCardRole) to model different behaviors.
 
-If a player is not working a part, the interaction might look like the following:
-
-```
-> who
-player blue ($1, 5cr)
-
-> where
-Jail wrapped
-
-> move Train Station
-
-> where
-Train Station shooting Law and the Old West scene 20
-
-> work Talking Mule
-
-> end
-```
-
-### Notes on Examples
-
-We are showing additional information like the player's money and credits. This would be nice but is not required. Remember, the point is to test the design and to have a robust working model, it is not to have a friendly user interface.
-
-In addition, you may find that your design (the one you submitted) has weaknesses. This is typical of any significantly sized software project. It is difficult to anticipate every possible detail of the system. Feel free to modify your design. However, you must update your design document (class diagram) as you modify the design. We will use this document to understand your software.
-
-Your program should accept a single parameter: the number of players. Like the rule book says, the game is designed for two to eight players.
-
----
-
-## Deliverables
-
-### Code Submission
-- You should submit your code via Canvas and give us access to your git repository
-- We will download your implementation from the repository, so please make sure we have full access to your repository
-- The file `Deadwood.java` should contain the main program
-- Our GitHub account information is available on Canvas
-- **Points: [20 points]**
-
-### Code Quality
-- Coding style, comments, descriptive names, and organization of files
-- **Points: [2.5 points]**
-
-### Class Diagram
-- Submit a revised Class Diagram (Canvas) that reflects your implementation
-- Explain (1-2 paragraphs) why you chose this design
-- **Points: [5 points]**
-
-### Documentation
-- Submit your Read Me file (Canvas)
-
-### Peer Evaluation
-- Email peer evaluation individually to: sharmim@wwu.edu
-- Subject must include "CSCI345 peer evaluation"
-- **Points: [2.5 points]**
-
-### Design Report
-- Submit a report (Canvas) specifying what types of Cohesion and Coupling you utilized in your design and your rationale for using them
-- Discuss your overall design choice and how that relates to SOLID design principles
-- This is a critical component
-- The grades you receive on this will be part of your Writing Proficiency (WP) points
-- **Points: [5% of overall grade]**
-
----
-
-## Due Dates and Mini-Milestones
-
-### First Milestone: Friday, Feb 6th
-- Submit your partially implemented program
-- You MUST have all the classes and the method signatures and attributes
-- You MUST complete the implementation for at least 2 of your classes
-- We will compile your code
-- **Deduction: If it doesn't compile, we will deduct 5 points**
-
-### Second Milestone: Saturday, Feb 14th
-- Submit your partially implemented program
-- You MUST have all the classes and the method signatures and attributes
-- You MUST complete the implementation for at least 5 of your classes
-- We will compile your code
-- **Deduction: If it doesn't compile, we will deduct 5 points**
-
-### Final Submission: Friday, Feb 20th
-- Complete code
-- Read Me file with instructions about how to compile and run your code
-- Class Diagram
-- Report specifying the use of cohesion and coupling and your design rationale related to SOLID
-
----
-
-## Grading Rubric
-
-| Item | Points |
-|------|--------|
-| Software correctly plays Deadwood and uses Object-Oriented principles | 20 |
-| Code Quality (comments, well-defined methods, descriptive names) | 2.5 |
-| Design Choices & Rationale (SOLID principles, Cohesion, Coupling) | 10 |
-| Class Diagram | 5 |
-| Peer Evaluation (Contribution Summary) | 2.5 |
-
----
-
-## Major Deductions
-
-**Case 1:** Your program does not compile
-- If it does not run, we can't give you any points
-
-**Case 2:** Your program compiles but breaks repeatedly
-- If every time we try to interact with it the program breaks, we won't be able to test the correctness
-
-**Case 3:** Your program runs but does not work correctly
-- Example: Players can move to non-adjacent rooms or players can act in roles above their rank
+This structure improves maintainability, testing, and extensibility.

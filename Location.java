@@ -1,4 +1,6 @@
+import java.util.Collections;
 import java.util.HashSet;
+
 public class Location {
     private final String name;
     private final java.util.Set<Location> neighbors = new HashSet<>();
@@ -22,10 +24,7 @@ public class Location {
     }
 
     public Location getNeighborByName(String neighborName) {
-        if (neighborName == null || neighborName.isBlank()) {
-            return null;
-        }
-
+        if (neighborName == null || neighborName.isBlank()) {return null;}
         for (Location loc : neighbors) {
             if (loc.getName().equalsIgnoreCase(neighborName)) {
                 return loc;
@@ -34,6 +33,10 @@ public class Location {
         return null; // not found
     }
 
+    public java.util.Set<Location> getNeighbors() {
+        return Collections.unmodifiableSet(neighbors);
+    }
+    
     @Override
     public String toString() {
         return name;

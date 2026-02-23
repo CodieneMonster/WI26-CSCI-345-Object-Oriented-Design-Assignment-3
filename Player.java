@@ -90,7 +90,7 @@ public class Player {
     public void takeRole(Role r) {
         if (r == null) {throw new IllegalArgumentException("Role cannot be null.");}
         if (isWorking()) {throw new IllegalStateException("Player already working on a role.");}
-     
+
         if (!r.isAvailable()) {throw new IllegalStateException("Role is not available.");}
         if (rank < r.getRankRequired()) {throw new IllegalStateException("Player rank too low for this role.");}
 
