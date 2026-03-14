@@ -91,6 +91,10 @@ public class ParseXML {
             if ("set".equals(tag)) {
                 String name = el.getAttribute("name");
                 Set set = new Set(name);
+                Area setArea = parseArea(el);
+                if (setArea != null) {
+                    set.setArea(setArea);
+                }
                 board.addLocation(set);
 
                 // Shots (count <take> nodes under <takes>)
@@ -100,7 +104,19 @@ public class ParseXML {
                     count = takes.getElementsByTagName("take").getLength();
                 }
                 shots.registerSet(set, count);
+                if (takes != null) {
+                    NodeList takeNodes = takes.getElementsByTagName("take");
+                    for (int t = 0; t < takeNodes.getLength(); t++) {
+                        Element takeEl = (Element) takeNodes.item(t);
 
+                        // int takeNum = parseIntSafe(takeEl.getAttribute("number"), -1);
+                        Area takeArea = parseArea(takeEl);
+
+                        if (takeArea != null) {
+                            set.addShotArea(takeArea);
+                        }
+                    }
+                }
                 // Off-card roles: <parts><part ...>
                 Element parts = firstChildElement(el, "parts");
                 if (parts != null) {
@@ -114,17 +130,29 @@ public class ParseXML {
 
                         // Default payouts
                         // Off-card success: +$1, fail: +1 credit
+                        Area roleArea = parseArea(partEl);
                         OffCardRole r = new OffCardRole(roleName, level, 1, 0, 0, 1, line);
+                        if (roleArea != null) {
+                            r.setArea(roleArea);
+                        }
                         set.addOffCardRole(r);
                     }
                 }
 
             } else if ("trailer".equals(tag)) {
                 Location trailers = new Location("Trailers");
+                Area a = parseArea(el);
+                if (a != null) {
+                    trailers.setArea(a);
+                }
                 board.addLocation(trailers);
 
             } else if ("office".equals(tag)) {
                 Location office = new Location("Casting Office");
+                Area a = parseArea(el);
+                if (a != null) {
+                    office.setArea(a);
+                }
                 board.addLocation(office);
             }
         }
@@ -193,6 +221,14 @@ public class ParseXML {
             int budget = parseIntSafe(cardEl.getAttribute("budget"), 0);
 
             SceneCard card = new SceneCard(title, budget);
+            String img = cardEl.getAttribute("img");
+            card.setImageName(img);
+
+            Element sceneEl = firstChildElement(cardEl, "scene");
+            if (sceneEl != null) {
+                String sceneText = sceneEl.getTextContent().trim();
+                card.setSceneDescription(sceneText);
+            }
 
             // On-card roles are nested <part> nodes
             NodeList parts = cardEl.getElementsByTagName("part");
@@ -203,9 +239,14 @@ public class ParseXML {
                 int level = parseIntSafe(partEl.getAttribute("level"), 1);
                 String line = textOfFirst(partEl, "line");
 
+                Area roleArea = parseArea(partEl);
+
                 // Default payouts
                 // On-card success: +2 credits, fail: +0
                 OnCardRole r = new OnCardRole(roleName, level, 0, 2, 0, 0, line);
+                if (roleArea != null) {
+                    r.setArea(roleArea);
+                }
                 card.addOnCardRole(r);
             }
 
@@ -235,5 +276,18 @@ public class ParseXML {
         } catch (Exception e) {
             return fallback;
         }
+    }
+
+    private static Area parseArea(Element parent) {
+        Element areaEl = firstChildElement(parent, "area");
+        if (areaEl == null) return null;
+
+        int x = parseIntSafe(areaEl.getAttribute("x"), 0);
+        int y = parseIntSafe(areaEl.getAttribute("y"), 0);
+
+        int w = parseIntSafe(areaEl.getAttribute("w"), 0);
+        int h = parseIntSafe(areaEl.getAttribute("h"), 0);
+
+        return new Area(x, y, w, h);
     }
 }

@@ -67,8 +67,17 @@ public class Game {
     }
 
     private void createPlayersAtTrailers(int n) {
+        String[] colors = {"b", "c", "g", "o", "p", "r", "y", "w"};
+
         for (int i = 1; i <= n; i++) {
             Player p = new Player("Player" + i, 1, 0, 0, trailers);
+
+            if (i - 1 < colors.length) {
+                p.setColorCode(colors[i - 1]);
+            } else {
+                p.setColorCode("r");
+            }
+
             players.add(p);
         }
     }

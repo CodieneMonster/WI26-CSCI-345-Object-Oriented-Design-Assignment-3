@@ -8,6 +8,7 @@ public class Player {
 
     private Location location; // current location
     private Role role; // current role (null if not working)
+    private String colorCode;
 
     public Player(String name, int startingRank, int startingDollars, int startingcredits, Location startLocation) {
         if (name == null || name.trim().isEmpty()) {
@@ -49,6 +50,14 @@ public class Player {
     public Role getRole() {return role;}
 
     public boolean isWorking() {return role != null;}
+
+    public void setColorCode(String colorCode) {
+        this.colorCode = colorCode;
+    }
+
+    public String getColorCode() {
+        return colorCode;
+    }
 
     // player info string for display
     public String statusString() {

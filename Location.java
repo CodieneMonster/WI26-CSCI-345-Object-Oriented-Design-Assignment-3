@@ -5,6 +5,17 @@ public class Location {
     private final String name;
     private final java.util.Set<Location> neighbors = new HashSet<>();
 
+    // Area
+    private Area area;
+
+    public void setArea(Area area) {
+        this.area = area;
+    }
+
+    public Area getArea() {
+        return area;
+    } 
+
     protected Location(String name) {
         if (name == null || name.isBlank()) {throw new IllegalArgumentException("Location name required");}
         this.name = name.trim();
@@ -32,6 +43,7 @@ public class Location {
         }
         return null; // not found
     }
+
 
     public java.util.Set<Location> getNeighbors() {
         return Collections.unmodifiableSet(neighbors);

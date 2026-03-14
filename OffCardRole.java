@@ -8,7 +8,7 @@ public class OffCardRole extends Role {
     public OffCardRole(String name, int rankRequired,
                        int successDollars, int successCredits,
                        int failDollars, int failCredits, String line) {
-        
+
         super(name, rankRequired);
         if (successDollars < 0 || successCredits < 0 || failDollars < 0 || failCredits < 0) {
             throw new IllegalArgumentException("Payout values must be non-negative.");

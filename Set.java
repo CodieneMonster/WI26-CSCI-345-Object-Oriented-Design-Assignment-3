@@ -12,20 +12,42 @@ public class Set extends Location {
 
     private boolean wrapped;
 
+    private boolean revealed;
+
     public Set(String name) {
         super(name);
         this.currentScene = null;
         this.wrapped = false;
+        this.revealed = false;
     }
 
+    // Area
+    private List<Area> shotAreas = new ArrayList<>();
+    public void addShotArea(Area a) {
+        if (a == null) throw new IllegalArgumentException("Area cannot be null.");
+        shotAreas.add(a);
+    }
+
+    public List<Area> getShotAreas() {
+        return Collections.unmodifiableList(shotAreas);
+    }
+
+
+    // reveal scene cards
+    public void revealScene() {
+        this.revealed = true;
+    }
+
+    public boolean isRevealed() {
+        return revealed;
+    }
     // Scene state 
-
     public void setScene(SceneCard scene) {
-        // clear old role occupancy (players leave roles when a new scene is dealt)
-        clearAllRoleOccupancy();
-
         this.currentScene = scene;
         this.wrapped = false;
+        this.revealed = false;
+        
+        clearAllRoleOccupancy();
     }
 
     public SceneCard getScene() {
@@ -42,10 +64,7 @@ public class Set extends Location {
         this.currentScene = null;
     }
 
-    
-
-    // Role management 
-
+    // Role management
     public void addOffCardRole(OffCardRole role) {
         if (role == null) throw new IllegalArgumentException("OffCardRole cannot be null.");
         offCardRoles.add(role);
@@ -59,8 +78,6 @@ public class Set extends Location {
         if (currentScene == null) return List.of();
         return currentScene.getOnCardRoles();
     }
-
-
 
     // Combined view for console/help + work command
     public List<Role> getAllRoles() {
@@ -88,7 +105,6 @@ public class Set extends Location {
     }
 
     // Work command support
-
     public Role assignRoleToPlayer(Player player, String roleName) {
         if (player == null) throw new IllegalArgumentException("Player cannot be null.");
         if (roleName == null || roleName.isBlank()) throw new IllegalArgumentException("Role name required.");
@@ -118,7 +134,6 @@ public class Set extends Location {
         }
     }
 
-    //  Console-friendly info 
     public String rolesSummary(Player viewer) {
         StringBuilder sb = new StringBuilder();
         sb.append("Roles at ").append(getName()).append(":\n");

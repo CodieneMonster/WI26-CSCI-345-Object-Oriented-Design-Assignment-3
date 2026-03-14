@@ -3,6 +3,17 @@ public abstract  class Role {
     private final int rankRequired;
     private Player occupiedBy;
 
+    // Area
+    private Area area;
+
+    public void setArea(Area area) {
+        this.area = area;
+    }
+
+    public Area getArea() {
+        return area;
+    }
+
     protected Role(String name, int rankRequired) {
         if (name == null || name.isBlank()) {throw new IllegalArgumentException("Role name required");}
         if (rankRequired < 1) {throw new IllegalArgumentException("Role rank must be at least 1");}

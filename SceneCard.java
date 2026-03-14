@@ -7,6 +7,9 @@ public class SceneCard {
     private final int budget;
     private final List<OnCardRole> onCardRoles;
 
+    private String imageName;
+    private String sceneDescription;
+
     public SceneCard(String title, int budget) {
         if (title == null || title.trim().isEmpty()) {
             throw new IllegalArgumentException("Scene title cannot be null or empty.");
@@ -38,6 +41,28 @@ public class SceneCard {
             if (r.getName().equalsIgnoreCase(key)) return true;
         }
         return false;
+    }
+
+    public void setImageName(String imageName) {
+        if (imageName == null || imageName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Image name cannot be null or empty.");
+        }
+        this.imageName = imageName.trim();
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setSceneDescription(String sceneDescription) {
+        if (sceneDescription == null || sceneDescription.trim().isEmpty()) {
+            throw new IllegalArgumentException("Scene description cannot be null or empty.");
+        }
+        this.sceneDescription = sceneDescription.trim();
+    }
+
+    public String getSceneDescription() {
+        return sceneDescription;
     }
 
     @Override
