@@ -1,7 +1,7 @@
 # Deadwood Game
 
 CSCI 345 – Object-Oriented Design  
-Assignment 2
+Assignment 3
 
 ## Overview
 
